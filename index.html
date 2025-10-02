@@ -213,35 +213,42 @@
             const resultsDiv = document.getElementById('summoner-results');
             const summonerInfo = document.getElementById('summoner-info');
             const championMastery = document.getElementById('champion-mastery');
-            
-            // Display summoner info
+
+            // Summoner info (nick + tag + level + profile icon)
+            const tag = data.summoner.tagLine ? `#${data.summoner.tagLine}` : '';
             summonerInfo.innerHTML = `
                 <div class="summoner-card">
-                    <h5>${data.summoner.name}</h5>
-                    <p>Level: ${data.summoner.level}</p>
+                <img class="summoner-icon" src="${data.summoner.profileIconUrl}" alt="Summoner Icon">
+                <h5>${data.summoner.name}${tag}</h5>
+                <p>Level: ${data.summoner.level}</p>
                 </div>
             `;
-            
-            // Display top champions
+
+            // Champion mastery
             if (data.topChampions && data.topChampions.length > 0) {
                 const championsHtml = data.topChampions.map(champ => `
-                    <div class="champion-card">
-                        <p><strong>Champion ID:</strong> ${champ.championId}</p>
+                <div class="champion-card">
+                    <div class="champion-row">
+                    <img class="champion-icon" src="${champ.iconUrl}" alt="${champ.championName}">
+                    <div class="champion-meta">
+                        <p><strong>Champion:</strong> ${champ.championName}</p>
                         <p><strong>Mastery Level:</strong> ${champ.championLevel}</p>
-                        <p><strong>Mastery Points:</strong> ${champ.championPoints.toLocaleString()}</p>
+                        <p><strong>Mastery Points:</strong> ${Number(champ.championPoints).toLocaleString()}</p>
                     </div>
+                    </div>
+                </div>
                 `).join('');
-                
+
                 championMastery.innerHTML = `
-                    <h5>Top Champions</h5>
-                    <div class="champions-grid">
-                        ${championsHtml}
-                    </div>
+                <h5>Top Champions</h5>
+                <div class="champions-grid">
+                    ${championsHtml}
+                </div>
                 `;
             } else {
                 championMastery.innerHTML = '<p>No champion mastery data found.</p>';
             }
-            
+
             resultsDiv.style.display = 'block';
         }
         
